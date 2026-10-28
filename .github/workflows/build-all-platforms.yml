@@ -74,6 +74,7 @@ jobs:
             -DSKIA_LIBRARY_DIR="$env:GITHUB_WORKSPACE\skia\out\Release-x64" `
             -DSKIA_LIBRARY="$env:GITHUB_WORKSPACE\skia\out\Release-x64\skia.lib" `
             -DENABLE_SCRIPTING=OFF `
+            -DENABLE_OPENSSL=OFF `
             -DENABLE_UPDATER=OFF `
             -DENABLE_TESTS=OFF `
             "$env:GITHUB_WORKSPACE\aseprite"
@@ -88,7 +89,7 @@ jobs:
         run: |
           cd build\bin
           "# This file is here so Aseprite behaves as a portable program" | Out-File -FilePath "aseprite.ini" -Encoding ASCII
-          Compress-Archive -Path * -DestinationPath "$env:GITHUB_WORKSPACE\Aseprite-${{ needs.fetch-version.outputs.version }}-Windows.zip"
+          Compress-Archive -Path aseprite.exe, aseprite.ini, data, icudtl.dat -DestinationPath "$env:GITHUB_WORKSPACE\Aseprite-${{ needs.fetch-version.outputs.version }}-Windows.zip"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -134,6 +135,7 @@ jobs:
             -DCMAKE_CXX_FLAGS=-stdlib=libstdc++ \
             -DCMAKE_EXE_LINKER_FLAGS=-stdlib=libstdc++ \
             -DLAF_BACKEND=skia \
+            -DENABLE_OPENSSL=OFF \
             -DSKIA_DIR=$GITHUB_WORKSPACE/skia \
             -DSKIA_LIBRARY_DIR=$GITHUB_WORKSPACE/skia/out/Release-x64 \
             -DENABLE_UPDATER=OFF \
